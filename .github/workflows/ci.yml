@@ -99,16 +99,13 @@ jobs:
           cache: true
           cache-dependency-path: go.sum
 
-      # v7 of the action is the first that installs golangci-lint v2, which
-      # is the schema .golangi.yml is written against. v6 installs the v1
-
-      # line and rejects the config outright.
-      #
-      # The version is pinned rather than tracking latest so the binary and
-      # the config cannot drift apart again without someone choosing to.
+      # Build from source with the configured Go toolchain: the prebuilt
+      # golangci-lint binary is built with an older Go version and rejects
+      # this module's Go 1.27.2 target.
       - uses: golangci/golangci-lint-action@v7
         with:
-          version: v2.1.6
+          version: v2.15.0
+          install-mode: goinstall
 
   # Every test is meant to run from recorded bytes. snapshot.Replayer returns
   # ErrNotRecorded rather than falling through to the network, so a test that
